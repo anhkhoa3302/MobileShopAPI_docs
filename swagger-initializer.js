@@ -94,6 +94,80 @@ window.onload = function() {
             }
           }
         },
+        "/api/Auth/register_google": {
+          "post": {
+            "tags": [
+              "Auth"
+            ],
+            "summary": "Register a user",
+            "description": "Heyyyyyyyyy",
+            "requestBody": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RegisterViewModel"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RegisterViewModel"
+                  }
+                },
+                "application/*+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RegisterViewModel"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Account created",
+                "content": {
+                  "text/plain": {
+                    "schema": {
+                      "$ref": "#/components/schemas/UserManagerResponse"
+                    }
+                  },
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/UserManagerResponse"
+                    }
+                  },
+                  "text/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/UserManagerResponse"
+                    }
+                  }
+                }
+              },
+              "400": {
+                "description": "Account has missing/invalid values",
+                "content": {
+                  "text/plain": {
+                    "schema": {
+                      "$ref": "#/components/schemas/UserManagerResponse"
+                    }
+                  },
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/UserManagerResponse"
+                    }
+                  },
+                  "text/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/UserManagerResponse"
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": ">Oops! Something went wrong"
+              }
+            }
+          }
+        },
         "/api/Auth/login": {
           "post": {
             "tags": [
@@ -458,7 +532,7 @@ window.onload = function() {
             "tags": [
               "Auth"
             ],
-            "summary": "Reset user password",
+            "summary": "Reset user Email",
             "requestBody": {
               "description": "",
               "content": {
@@ -2612,7 +2686,7 @@ window.onload = function() {
               "Product"
             ],
             "summary": "Add product",
-            "description": "Add image along with product:\r\n\r\n    POST\r\n    {\r\n        \"id\": 0, (not require, can be any number but null)\r\n        \"url\": \"string\", (required)\r\n        \"isCover\": false, (not require, true/false makes no differences)\r\n        \"isDeleted\": false, (not require, true/false makes no differences)\r\n        \"isNewlyAdded\": false (not require, true/false makes no differences)\r\n    }",
+            "description": "Add image along with product:\r\n\r\n    GET\r\n    {\r\n        \"id\": 0, (not require, can be any number but null)\r\n        \"url\": \"string\", (required)\r\n        \"isCover\": false, (not required, true/false makes no differences)\r\n        \"isDeleted\": false, (not required, true/false makes no differences)\r\n        \"isNewlyAdded\": false (not required, true/false makes no differences)\r\n    }",
             "requestBody": {
               "description": "",
               "content": {
@@ -2752,7 +2826,7 @@ window.onload = function() {
               "Product"
             ],
             "summary": "update product",
-            "description": "Change product's cover:\r\n\r\n    PUT\r\n    {\r\n        \"id\": 0, (id of an image you want it to be the cover)\r\n        \"url\": \"string\", ( not required)\r\n        \"isCover\": true, (must be TRUE)\r\n        \"isDeleted\": false, (must be FALSE)\r\n        \"isNewlyAdded\": false (must be FALSE)\r\n    }\r\n    \r\nAdd new image to product:\r\n\r\n    PUT\r\n    {\r\n        \"id\": 0, (not required)\r\n        \"url\": \"string\", (required)\r\n        \"isCover\": true, (could be true, if true the newly added image will be product's new cover)\r\n        \"isDeleted\": false, (must be FALSE)\r\n        \"isNewlyAdded\": false (must be TRUE)   \r\n    }\r\n    \r\nDelete image:\r\n\r\n    PUT\r\n    {\r\n        \"id\": 0, (required)\r\n        \"url\": \"string\", ( not required)\r\n        \"isCover\": true, (must be FALSE)\r\n        \"isDeleted\": false, (must be TRUE)\r\n        \"isNewlyAdded\": false (must be FALSE)   \r\n    }",
+            "description": "Change product's cover:\r\n\r\n    PUT\r\n    {\r\n        \"id\": 0, (id of an image you want it to be the cover)\r\n        \"url\": \"string\", ( not required)\r\n        \"isCover\": true, (must be TRUE)\r\n        \"isDeleted\": false, (must be FALSE)\r\n        \"isNewlyAdded\": false (must be FALSE)\r\n    }\r\n    \r\nAdd new image to product:\r\n\r\n    PUT\r\n    {\r\n        \"id\": 0, (not required)\r\n        \"url\": \"string\", (required)\r\n        \"isCover\": true, (could be true, if true the newly added image will be product's new cover)\r\n        \"isDeleted\": false, (must be FALSE)\r\n        \"isNewlyAdded\": true (must be TRUE)   \r\n    }\r\n    \r\nDelete image:\r\n\r\n    PUT\r\n    {\r\n        \"id\": 0, (required)\r\n        \"url\": \"string\", ( not required)\r\n        \"isCover\": false, (must be FALSE)\r\n        \"isDeleted\": true, (must be TRUE)\r\n        \"isNewlyAdded\": false (must be FALSE)   \r\n    }",
             "parameters": [
               {
                 "name": "id",
@@ -3625,15 +3699,107 @@ window.onload = function() {
             }
           }
         },
-        "/api/ShippingAddress/getAll": {
+        "/api/Search": {
+          "get": {
+            "tags": [
+              "Search"
+            ],
+            "summary": "Search product",
+            "description": "Search all:\r\n\r\n    GET\r\n    {\r\n        \"keyWord\": \"string\",\r\n        \"categoryId\": 0,\r\n        \"brandId\": 0\r\n    }\r\n\r\nSearch by brand:\r\n    \r\n    GET\r\n    {\r\n        \"keyWord\": \"string\",\r\n        \"categoryId\": 0,\r\n        \"brandId\": {brandId}\r\n    }\r\n    \r\nSearch by category:\r\n\r\n    GET\r\n    {\r\n        \"keyWord\": \"string\",\r\n        \"categoryId\": {categoryId},\r\n        \"brandId\": 0\r\n    }\r\n    \r\n\r\nSearch by brand and category:\r\n\r\n    GET\r\n    {\r\n        \"keyWord\": \"string\",\r\n        \"categoryId\": {categoryId},\r\n        \"brandId\": {brandId}\r\n    }",
+            "requestBody": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SearchViewModel"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SearchViewModel"
+                  }
+                },
+                "application/*+json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SearchViewModel"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Search result",
+                "content": {
+                  "text/plain": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  },
+                  "application/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  },
+                  "text/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  }
+                }
+              },
+              "400": {
+                "description": "Not found",
+                "content": {
+                  "text/plain": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  },
+                  "application/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  },
+                  "text/json": {
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  }
+                }
+              },
+              "500": {
+                "description": ">Oops! Something went wrong"
+              }
+            }
+          }
+        },
+        "/api/ShippingAddress/getUserAddress": {
           "get": {
             "tags": [
               "ShippingAddress"
             ],
-            "summary": "Get all Shipping Address",
+            "summary": "Get user addresses",
             "responses": {
               "200": {
-                "description": "Get all shipping address",
+                "description": "Get all user's shipping addresses",
                 "content": {
                   "text/plain": {
                     "schema": {
@@ -6916,6 +7082,24 @@ window.onload = function() {
               },
               "confirmPassword": {
                 "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "SearchViewModel": {
+            "type": "object",
+            "properties": {
+              "keyWord": {
+                "type": "string",
+                "nullable": true
+              },
+              "categoryId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "brandId": {
+                "type": "integer",
+                "format": "int32"
               }
             },
             "additionalProperties": false
